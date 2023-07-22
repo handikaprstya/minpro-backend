@@ -24,10 +24,10 @@ const userController = {
         const salt = await enkrip.genSalt(10);
         const hashPassword = await enkrip.hash(password, salt);
         const result = await user.create({ username, email,phonenumber, password : hashPassword });
-        const token = jwt.sign({ username, email, phonenumber, password }, 'handika123', {expiresIn :'1h'});
+        const token = jwt.sign({ username, email, phonenumber, password }, process.env.KEY_JWT, {expiresIn :'1h'});
       
         await transporter.sendMail({
-          from: 'handikaprasetya.wisnu@gmail.com',
+          from: process.env.EMAIL_DATABASE,
           to: email,
           subject :'test',
           html : '<h1>Sukses</h1>'
@@ -102,7 +102,7 @@ const userController = {
         email:data.email,
         imgURL: data.imgURL
       }
-      const token = jwt.sign(payLoad, 'handika123');
+      const token = jwt.sign(payLoad, process.env.KEY_JWT);
       res.status(200).send({
         message : 'Success',
         data,
@@ -204,16 +204,16 @@ const userController = {
           {where : {id : req.user.id}}
           );
 
-        const token = jwt.sign({username, email, newEmail, phone }, 'handika123', {expiresIn :'1h'});
+        const token = jwt.sign({username, email, newEmail, phone },  process.env.KEY_JWT, {expiresIn :'1h'});
         await transporter.sendMail({
-          from : "handikaprasetya.wisnu@gmail.com",
+          from : process.env.EMAIL_DATABASE,
           to : email,
           subject : 'test',
           html :'<h1> Success </h1>'
         })
 
         res.status(200).send({
-          message : 'check your mail',
+          message : 'check your email',
           token
         });
       }
@@ -232,9 +232,9 @@ const userController = {
       });
       if (isEmailExist !== null) {
         const {id, username, email} = isEmailExist;
-        const token = jwt.sign({id, username, email}, 'handika123');
+        const token = jwt.sign({id, username, email},  process.env.KEY_JWT);
         await transporter.sendMail({
-          from : 'handikaprasetya.wisnu@gmail.com',
+          from : process.env.EMAIL_DATABASE,
           to : email,
           subject : 'test',
           html :'<h1> Success </h1>'

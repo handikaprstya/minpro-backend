@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { verifyToken } = require('../middleware/auth')
 const { multerUpload } = require ('../middleware/multer')
-const {blog} = require('../controller')
+const { blog } = require('../controller')
 
 
 
